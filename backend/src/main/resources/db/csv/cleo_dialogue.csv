@@ -1,0 +1,8 @@
+﻿id;dialogue;user_parent_dialogue;mood;type;current_line;opinion_of_user;audio_file_name
+1;Good morning.;null;NONE;GREETING;0;NONE;null
+2;Good afternoon.;null;NONE;GREETING;0;NONE;null
+3;Good evening.;null;NONE;GREETING;0;NONE;null
+4;Good night.;null;NONE;FAREWELL;0;NONE;null
+5;Hello.;null;NONE;GREETING;0;LIKE;null
+6;HI.;null;HAPPY;GREETING;0;FRIENDS;null
+6;HI.;null;Goodbye;FAREWELL;0;FRIENDS;null
