@@ -1,0 +1,69 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+    <changeSet author="Johnny Cold" id="Create dialogue tables">
+        <createTable tableName="cleo_dialogue">
+            <column autoIncrement="true" name="id" type="BIGSERIAL">
+                <constraints primaryKey="true" primaryKeyName="cleo_dialogue_pkey"/>
+            </column>
+            <column name="dialogue" type="VARCHAR">
+                <constraints nullable="false" />
+            </column>
+            <column name="user_parent_dialogue" type="BIGINT">
+                <constraints nullable="true"/>
+            </column>
+            <column name="mood" type="VARCHAR(25)">
+                <constraints nullable="false" />
+            </column>
+            <column name="type" type="VARCHAR(25)">
+                <constraints nullable="false" />
+            </column>
+            <column name="current_line" type="BOOLEAN" />
+            <column name="opinion_of_user" type="VARCHAR(25)">
+                <constraints nullable="false" />
+            </column>
+            <column name="audio_file_name" type="VARCHAR(25)">
+<!--                <constraints nullable="false" />-->
+            </column>
+        </createTable>
+
+        <createTable tableName="user_dialogue">
+            <column autoIncrement="true" name="id" type="BIGSERIAL">
+                <constraints primaryKey="true" primaryKeyName="user_dialogue_pkey"/>
+            </column>
+            <column name="dialogue" type="VARCHAR">
+                <constraints nullable="false" />
+            </column>
+            <column name="cleo_parent_dialogue" type="BIGINT">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="user_dialogue"
+                                 baseColumnNames="cleo_parent_dialogue"
+                                 constraintName="cleo_parent_dialogue_fkey"
+                                 referencedColumnNames="id"
+                                 referencedTableName="cleo_dialogue"/>
+
+        <addForeignKeyConstraint baseTableName="cleo_dialogue"
+                                 baseColumnNames="user_parent_dialogue"
+                                 constraintName="user_parent_dialogue_fkey"
+                                 referencedColumnNames="id"
+                                 referencedTableName="user_dialogue"/>
+        
+        <!-- start: Loading data from .csv files -->
+        <loadData encoding="UTF-8"
+                  file="../csv/cleo_dialogue.csv"
+                  separator=";"
+                  tableName="cleo_dialogue"
+                  relativeToChangelogFile="true"/>
+
+        <loadData encoding="UTF-8"
+                  file="../csv/user_dialogue.csv"
+                  separator=";"
+                  tableName="user_dialogue"
+                  relativeToChangelogFile="true"/>
+        <!--end: Loading data from .csv files -->
+   </changeSet>
+</databaseChangeLog>

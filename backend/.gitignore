@@ -1,0 +1,10 @@
+target/
+.idea/
+*.iml
+settings/
+sts4-cache/
+classpath
+project
+vscode/
+.factorypath
+**/temp/
