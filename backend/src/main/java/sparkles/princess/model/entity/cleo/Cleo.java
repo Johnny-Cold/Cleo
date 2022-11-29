@@ -1,10 +1,12 @@
 package sparkles.princess.model.entity.cleo;
 
 import lombok.Getter;
+import lombok.Setter;
 import sparkles.princess.model.enums.Mood;
 
 public class Cleo {
     @Getter
+    @Setter
     private CleoState state;
 
     public boolean likesUser() {

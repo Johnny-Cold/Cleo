@@ -16,7 +16,6 @@ public interface CleoDialogueRepository extends JpaRepository<CleoDialogue, Long
     List<CleoDialogue> findAllByMoodAndOpinionOfUser(Mood mood, OpinionOfUser opinionOfUser);
     List<CleoDialogue> findAllByDialogueTypeAndMood(DialogueType type, Mood mood);
 
-    @Query("inner join " +
-            "select g from CleoDialogue g where g.type = 'GREETING' and g.mood =: mood")
-    List<CleoDialogue> findGreetings(LocalDateTime lastActiveDate, Mood mood);
+    @Query("select g from CleoDialogue g where g.type = ?1 and g.mood = ?2")
+    List<CleoDialogue> findGreetings(DialogueType greetingType, Mood mood);
 }

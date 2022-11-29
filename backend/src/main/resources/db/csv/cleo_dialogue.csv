@@ -5,4 +5,9 @@
 4;Good night.;null;NONE;FAREWELL;0;NONE;null
 5;Hello.;null;NONE;GREETING;0;LIKE;null
 6;HI.;null;HAPPY;GREETING;0;FRIENDS;null
-6;HI.;null;Goodbye;FAREWELL;0;FRIENDS;null
+7;Goodbye.;null;NONE;FAREWELL;0;NONE;null
+8;Bye.;null;NONE;FAREWELL;0;FRIENDS;null
+9;My name is Cleo. An artificail intelligence created for no purpose in particular. You have been assigned to test my intelligence and robustness to assess the extent of my intelligence and identify shortcomings and flaws in my engineering. Please provide me with your name; be it a preferred one or otherwise;null;NONE;DIALOGUE;0;NONE;null
+10;Thank you.;null;NONE;DIALOGUE;0;NONE;null
+11;Are you male or female?;null;NONE;DIALOGUE;0;NONE;null
+"12;That concludes the configuration process. Thank you. With that, let's begin.;"

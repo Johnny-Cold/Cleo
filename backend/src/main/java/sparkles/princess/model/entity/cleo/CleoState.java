@@ -12,8 +12,8 @@ import java.util.Objects;
 
 @Getter
 @Setter
-@Table(name = "state")
-@Entity(name = "state")
+@Table(name = "cleo_state")
+@Entity(name = "cleo_state")
 public class CleoState extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "mood", nullable = false, columnDefinition = "varchar(100) default 'happy'")
@@ -30,6 +30,13 @@ public class CleoState extends BaseEntity {
     @NonNull
     @Column(name = "last_active_date_time", nullable = false)
     private LocalDateTime lastActiveDateTime;
+
+    public CleoState(Mood mood, OpinionOfUser opinionOfUser, @NonNull LocalDateTime createdDateTime, @NonNull LocalDateTime lastActiveDateTime) {
+        this.mood = mood;
+        this.opinionOfUser = opinionOfUser;
+        this.createdDateTime = createdDateTime;
+        this.lastActiveDateTime = lastActiveDateTime;
+    }
 
     @Override
     public int hashCode() {
