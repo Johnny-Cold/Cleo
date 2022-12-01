@@ -12,6 +12,8 @@ public interface CleoDialogueService {
 
     List<CleoDialogue> getGreetings(Cleo cleo);
 
+    List<CleoDialogue> getTimeOfDayGreetings(Cleo cleo);
+
     List<CleoDialogue> getFarewells(Cleo cleo);
 
     CleoDialogue greet(Cleo cleo);

@@ -1,10 +1,12 @@
 package sparkles.princess.service;
 
 import junit.framework.TestCase;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
 import sparkles.princess.model.entity.cleo.Cleo;
 import sparkles.princess.model.entity.cleo.OpinionOfUser;
@@ -31,30 +33,19 @@ public class CleoDialogueServiceImplTest extends TestCase {
     private CleoDialogueRepository repository;
 
     @InjectMocks
-    private CleoDialogueService service = spy(CleoDialogueServiceImpl.class);
-
-    private Cleo createCleo(Mood mood, OpinionOfUser opinionOfUser, LocalDateTime createdDateTime, LocalDateTime lastActiveDateTime) {
-        CleoState state = new CleoState(mood, opinionOfUser, createdDateTime, lastActiveDateTime);
-        Cleo cleo = new Cleo();
-        cleo.setState(state);
-        return cleo;
-    }
+    private CleoDialogueServiceImpl service;
 
     @Test
-    public void getListOfCleoDialogue_When_CleoLastActiveLessThan7DaysAgo() {
+    public void getListOfGreetings() {
         OpinionOfUser opinionOfUser = OpinionOfUser.NONE;
         Mood mood = Mood.NONE;
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime yesterday = now.minusDays(1);
-
         Cleo cleo = createCleo(mood, opinionOfUser, yesterday, yesterday);
         CleoDialogue greeting1 = new CleoDialogue("Hello", DialogueType.GREETING, false, opinionOfUser, null);
-        CleoDialogue greeting2 = new CleoDialogue("Hello. It has been quite some time.", DialogueType.LONG_TIME_NO_SEE, false, opinionOfUser, null);
+        CleoDialogue greeting2 = new CleoDialogue("It has been quite some time.", DialogueType.OBSERVATION, false, opinionOfUser, null);
         List<CleoDialogue> greetings = Arrays.asList(greeting1, greeting2);
-        DialogueType greetingType = (Duration.between(now, yesterday).toDays() > 7L) ? DialogueType.LONG_TIME_NO_SEE : DialogueType.GREETING;
-
-        when(repository.findGreetings(greetingType, mood)).thenReturn(greetings.stream().filter(g -> g.getType().equals(greetingType)).collect(Collectors.toList()));
-
+        when(repository.findGreetings(DialogueType.GREETING, mood)).thenReturn(greetings.subList(0, 1));
         List<CleoDialogue> result = service.getGreetings(cleo);
         assertEquals(greetings.subList(0, 1), result);
     }
@@ -69,5 +60,12 @@ public class CleoDialogueServiceImplTest extends TestCase {
     }
 
     public void testValedict() {
+    }
+
+    private Cleo createCleo(Mood mood, OpinionOfUser opinionOfUser, LocalDateTime createdDateTime, LocalDateTime lastActiveDateTime) {
+        CleoState state = new CleoState(mood, opinionOfUser, createdDateTime, lastActiveDateTime);
+        Cleo cleo = new Cleo();
+        cleo.setState(state);
+        return cleo;
     }
 }

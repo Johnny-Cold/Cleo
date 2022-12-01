@@ -12,6 +12,8 @@ import sparkles.princess.repository.CleoDialogueRepository;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.Month;
 import java.util.List;
 import java.util.Random;
 
@@ -33,9 +35,26 @@ public class CleoDialogueServiceImpl implements CleoDialogueService {
     @Override
     public List<CleoDialogue> getGreetings(Cleo cleo) {
         Mood mood = cleo.getState().getMood();
-        LocalDateTime lastActiveDate = cleo.getState().getLastActiveDateTime();
+        return repository.findGreetings(DialogueType.GREETING, mood);
+    }
+
+    @Override
+    public List<CleoDialogue> getTimeOfDayGreetings(Cleo cleo) {
+        Mood mood = cleo.getState().getMood();
+        DialogueType greetingType = null;
+
         LocalDateTime now = LocalDateTime.now();
-        DialogueType greetingType = (Duration.between(now, lastActiveDate).toDays() > 7L) ? DialogueType.LONG_TIME_NO_SEE : DialogueType.GREETING;
+        LocalDateTime midnight = LocalDateTime.of(now.toLocalDate(), LocalTime.of(0, 0, 0));
+        LocalDateTime noon = LocalDateTime.of(now.toLocalDate(), LocalTime.of(12, 0, 0));
+        LocalDateTime night = LocalDateTime.of(now.toLocalDate(), LocalTime.of(17, 0, 0));
+
+        if (isBetween(now, midnight, noon)) {
+            greetingType = DialogueType.MORNING_GREETING;
+        } else if (isBetween(now, noon, night)) {
+            greetingType = DialogueType.NOON_GREETING;
+        } else if (isBetween(now, night, midnight)) {
+            greetingType = DialogueType.NIGHT_GREETING;
+        }
 
         return repository.findGreetings(greetingType, mood);
     }
@@ -60,5 +79,7 @@ public class CleoDialogueServiceImpl implements CleoDialogueService {
         return farewells.get(random.nextInt(farewells.size() - 1));
     }
 
-
+    private boolean isBetween(LocalDateTime dateTime, LocalDateTime beforeDateTime, LocalDateTime afterDateTime) {
+        return dateTime.isBefore(beforeDateTime) && dateTime.isAfter(afterDateTime);
+    }
 }
