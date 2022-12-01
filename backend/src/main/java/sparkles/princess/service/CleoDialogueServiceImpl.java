@@ -10,10 +10,8 @@ import sparkles.princess.model.enums.DialogueType;
 import sparkles.princess.model.enums.Mood;
 import sparkles.princess.repository.CleoDialogueRepository;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.Month;
 import java.util.List;
 import java.util.Random;
 
@@ -39,20 +37,19 @@ public class CleoDialogueServiceImpl implements CleoDialogueService {
     }
 
     @Override
-    public List<CleoDialogue> getTimeOfDayGreetings(Cleo cleo) {
+    public List<CleoDialogue> getTimeOfDayGreetings(LocalDateTime localDateTime, Cleo cleo) {
         Mood mood = cleo.getState().getMood();
         DialogueType greetingType = null;
 
-        LocalDateTime now = LocalDateTime.now();
-        LocalDateTime midnight = LocalDateTime.of(now.toLocalDate(), LocalTime.of(0, 0, 0));
-        LocalDateTime noon = LocalDateTime.of(now.toLocalDate(), LocalTime.of(12, 0, 0));
-        LocalDateTime night = LocalDateTime.of(now.toLocalDate(), LocalTime.of(17, 0, 0));
+        LocalDateTime midnight = LocalDateTime.of(localDateTime.toLocalDate(), LocalTime.of(0, 0, 0));
+        LocalDateTime noon = LocalDateTime.of(localDateTime.toLocalDate(), LocalTime.of(12, 0, 0));
+        LocalDateTime night = LocalDateTime.of(localDateTime.toLocalDate(), LocalTime.of(17, 0, 0));
 
-        if (isBetween(now, midnight, noon)) {
+        if (isBetween(localDateTime, noon, midnight)) {
             greetingType = DialogueType.MORNING_GREETING;
-        } else if (isBetween(now, noon, night)) {
+        } else if (isBetween(localDateTime, night, noon)) {
             greetingType = DialogueType.NOON_GREETING;
-        } else if (isBetween(now, night, midnight)) {
+        } else if (isBetween(localDateTime, midnight, night)) {
             greetingType = DialogueType.NIGHT_GREETING;
         }
 

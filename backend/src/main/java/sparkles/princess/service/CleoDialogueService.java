@@ -5,6 +5,7 @@ import sparkles.princess.model.entity.cleo.OpinionOfUser;
 import sparkles.princess.model.entity.dialogue.CleoDialogue;
 import sparkles.princess.model.enums.Mood;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface CleoDialogueService {
@@ -12,7 +13,7 @@ public interface CleoDialogueService {
 
     List<CleoDialogue> getGreetings(Cleo cleo);
 
-    List<CleoDialogue> getTimeOfDayGreetings(Cleo cleo);
+    List<CleoDialogue> getTimeOfDayGreetings(LocalDateTime localDateTime, Cleo cleo);
 
     List<CleoDialogue> getFarewells(Cleo cleo);
 

@@ -1,29 +1,25 @@
 package sparkles.princess.service;
 
 import junit.framework.TestCase;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
 import sparkles.princess.model.entity.cleo.Cleo;
+import sparkles.princess.model.entity.cleo.CleoState;
 import sparkles.princess.model.entity.cleo.OpinionOfUser;
 import sparkles.princess.model.entity.dialogue.CleoDialogue;
 import sparkles.princess.model.enums.DialogueType;
 import sparkles.princess.model.enums.Mood;
 import sparkles.princess.repository.CleoDialogueRepository;
 
-import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import sparkles.princess.model.entity.cleo.*;
-
-import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -42,12 +38,30 @@ public class CleoDialogueServiceImplTest extends TestCase {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime yesterday = now.minusDays(1);
         Cleo cleo = createCleo(mood, opinionOfUser, yesterday, yesterday);
-        CleoDialogue greeting1 = new CleoDialogue("Hello", DialogueType.GREETING, false, opinionOfUser, null);
-        CleoDialogue greeting2 = new CleoDialogue("It has been quite some time.", DialogueType.OBSERVATION, false, opinionOfUser, null);
-        List<CleoDialogue> greetings = Arrays.asList(greeting1, greeting2);
-        when(repository.findGreetings(DialogueType.GREETING, mood)).thenReturn(greetings.subList(0, 1));
-        List<CleoDialogue> result = service.getGreetings(cleo);
-        assertEquals(greetings.subList(0, 1), result);
+        List<CleoDialogue> greetings = Arrays.asList(
+                new CleoDialogue("Hello", DialogueType.GREETING, false, opinionOfUser, null),
+                new CleoDialogue("It has been quite some time.", DialogueType.OBSERVATION, false, opinionOfUser, null));
+        List<CleoDialogue> expected = greetings.subList(0, 1);
+
+        when(repository.findGreetings(DialogueType.GREETING, mood)).thenReturn(expected);
+        List<CleoDialogue> actual = service.getGreetings(cleo);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void getTimeOfDayGreetingsReturnsMorningGreetings_When_itIsCurrentlyMorning() {
+        OpinionOfUser opinionOfUser = OpinionOfUser.NONE;
+        Mood mood = Mood.NONE;
+        LocalDateTime sixInTheMorning = LocalDateTime.of(LocalDate.now(), LocalTime.of(6, 0, 0));
+        LocalDateTime yesterday = sixInTheMorning.minusDays(1);
+        Cleo cleo = createCleo(mood, opinionOfUser, yesterday, yesterday);
+        List<CleoDialogue> greetings = Arrays.asList(new CleoDialogue("Hello", DialogueType.GREETING, false, opinionOfUser, null),
+                new CleoDialogue("It has been quite some time.", DialogueType.OBSERVATION, false, opinionOfUser, null),
+                new CleoDialogue("Good morning.", DialogueType.MORNING_GREETING, false, opinionOfUser, null));
+        List<CleoDialogue> expected = greetings.subList(1, 2);
+        when(repository.findGreetings(DialogueType.MORNING_GREETING, mood)).thenReturn(expected);
+        List<CleoDialogue> actual = service.getTimeOfDayGreetings(sixInTheMorning, cleo);
+        assertEquals(expected, actual);
     }
 
     public void testGetGreetings() {
