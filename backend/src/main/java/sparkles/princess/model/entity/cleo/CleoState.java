@@ -3,12 +3,14 @@ package sparkles.princess.model.entity.cleo;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import sparkles.princess.model.BaseEntity;
 import sparkles.princess.model.enums.Mood;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 @Getter
 @Setter
@@ -30,6 +32,12 @@ public class CleoState extends BaseEntity {
     @NonNull
     @Column(name = "last_active_date_time", nullable = false)
     private LocalDateTime lastActiveDateTime;
+
+    public CleoState() {
+        mood = Mood.NONE;
+        opinionOfUser = OpinionOfUser.NONE;
+        lastActiveDateTime = LocalDateTime.now();
+    }
 
     public CleoState(Mood mood, OpinionOfUser opinionOfUser, @NonNull LocalDateTime createdDateTime, @NonNull LocalDateTime lastActiveDateTime) {
         this.mood = mood;
@@ -54,5 +62,10 @@ public class CleoState extends BaseEntity {
                 && (opinionOfUser == cleoState.opinionOfUser)
                 && (Objects.equals(createdDateTime, cleoState.createdDateTime))
                 && (Objects.equals(lastActiveDateTime, cleoState.lastActiveDateTime));
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);
     }
 }

@@ -3,9 +3,9 @@ package sparkles.princess.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import sparkles.princess.model.entity.dialogue.CleoDialogue;
-import sparkles.princess.model.entity.cleo.OpinionOfUser;
 import sparkles.princess.model.entity.cleo.Cleo;
+import sparkles.princess.model.entity.cleo.OpinionOfUser;
+import sparkles.princess.model.entity.dialogue.CleoDialogue;
 import sparkles.princess.model.enums.DialogueType;
 import sparkles.princess.model.enums.Mood;
 import sparkles.princess.repository.CleoDialogueRepository;
@@ -64,19 +64,22 @@ public class CleoDialogueServiceImpl implements CleoDialogueService {
 
     @Override
     public CleoDialogue greet(Cleo cleo) {
-        Random random = new Random();
         List<CleoDialogue> greetings = getGreetings(cleo);
-        return greetings.get(random.nextInt(greetings.size() - 1));
+        return greetings.get(getRandomIndex(greetings));
     }
 
     @Override
     public CleoDialogue valedict(Cleo cleo) {
-        Random random = new Random();
         List<CleoDialogue> farewells = getFarewells(cleo);
-        return farewells.get(random.nextInt(farewells.size() - 1));
+        return farewells.get(getRandomIndex(farewells));
     }
 
     private boolean isBetween(LocalDateTime dateTime, LocalDateTime beforeDateTime, LocalDateTime afterDateTime) {
         return dateTime.isBefore(beforeDateTime) && dateTime.isAfter(afterDateTime);
+    }
+
+    private static int getRandomIndex(List<CleoDialogue> greetings) {
+        Random random = new Random();
+        return random.nextInt(greetings.size() - 1);
     }
 }
